@@ -1,0 +1,31 @@
+--- liblangtag-0.4.0/liblangtag/lt-ext-module.c~	2012-10-16 04:48:31.000000000 +0200
++++ liblangtag-0.4.0/liblangtag/lt-ext-module.c	2013-02-14 11:35:35.138119334 +0100
+@@ -258,7 +258,7 @@
+ 					       (lt_destroy_func_t)dlclose);
+ 				func = dlsym(module->module, "module_get_version");
+ 				if (!func) {
+-					lt_warning(dlerror());
++					lt_warning("%s", dlerror());
+ 					break;
+ 				}
+ 				if (((lt_ext_module_version_func_t)func)() != LT_EXT_MODULE_VERSION) {
+@@ -268,7 +268,7 @@
+ 				}
+ 				func = dlsym(module->module, "module_get_funcs");
+ 				if (!func) {
+-					lt_warning(dlerror());
++					lt_warning("%s", dlerror());
+ 					break;
+ 				}
+ 				if (!(module->funcs = ((lt_ext_module_get_funcs_func_t)func)())) {
+--- liblangtag-0.4.0/tests/main.c~	2012-10-09 11:44:06.000000000 +0200
++++ liblangtag-0.4.0/tests/main.c	2013-02-14 11:36:53.860009569 +0100
+@@ -37,7 +37,7 @@
+        const char            *message,
+        lt_pointer_t           user_data)
+ {
+-	lt_error_set(&error, type, message);
++	lt_error_set(&error, type, "%s", message);
+ }
+ 
+ static void

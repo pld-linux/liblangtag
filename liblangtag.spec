@@ -2,7 +2,7 @@ Summary:	An interface library to access tags for identifying languages
 Name:		liblangtag
 Version:	0.4.0
 Release:	1
-License:	LGPLv3+
+License:	LGPL v3+
 Group:		Libraries
 URL:		http://tagoh.bitbucket.org/liblangtag/
 Source0:	https://bitbucket.org/tagoh/liblangtag/downloads/%{name}-%{version}.tar.bz2
@@ -36,7 +36,7 @@ Features:
 %package devel
 Summary:	Development files for %{name}
 Group:		Development/Libraries
-Requires:	%{name}%{?_isa} = %{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 
 %description devel
 The %{name}-devel package contains libraries and header files for
@@ -49,11 +49,12 @@ developing applications that use %{name}.
 
 %build
 %configure \
+	--disable-silent-rules \
 	--disable-static \
 	--enable-shared \
 	--disable-introspection \
 
-%{__make} V=1 \
+%{__make} \
 	LD_LIBRARY_PATH=`pwd`/liblangtag/.libs${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 
 %install
@@ -62,17 +63,17 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-rm -f $RPM_BUILD_ROOT/%{_libdir}/*.la $RPM_BUILD_ROOT/%{_libdir}/%{name}/*.la
+%{__rm} $RPM_BUILD_ROOT/%{_libdir}/*.la $RPM_BUILD_ROOT/%{_libdir}/%{name}/*.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
+%post	-p /sbin/ldconfig
+%postun	-p /sbin/ldconfig
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS COPYING NEWS README
+%doc AUTHORS NEWS README
 %attr(755,root,root) %{_libdir}/%{name}.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/%{name}.so.1
 %dir %{_libdir}/%{name}

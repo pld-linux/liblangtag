@@ -1,3 +1,8 @@
+#
+# Conditional build:
+%bcond_without	static_libs	# static library build
+%bcond_without	tests		# "make check" call
+#
 Summary:	An interface library to access tags for identifying languages
 Summary(pl.UTF-8):	Biblioteka interfejsu dostępu do znaczników identyfikujących języki
 Name:		liblangtag
@@ -10,9 +15,12 @@ Source0:	https://bitbucket.org/tagoh/liblangtag/downloads/%{name}-%{version}.tar
 Patch0:		0001-Fix-build-issues-with-MSVC.patch
 Patch1:		%{name}-Werror.patch
 URL:		http://tagoh.bitbucket.org/liblangtag/
-BuildRequires:	gtk-doc
-BuildRequires:	libtool
-BuildRequires:	libxml2-devel
+%{?with_tests:BuildRequires:	check-devel >= 0.9.4}
+BuildRequires:	glib2-devel >= 2.0
+BuildRequires:	gobject-introspection-devel >= 1.30.0
+BuildRequires:	gtk-doc >= 1.0
+BuildRequires:	libxml2-devel >= 2.1.0
+BuildRequires:	pkgconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -58,6 +66,7 @@ Summary:	Development files for liblangtag
 Summary(pl.UTF-8):	Pliki programistyczne biblioteki liblangtag
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	glib2-devel >= 2.0
 
 %description devel
 This package contains the header files for developing applications
@@ -67,20 +76,36 @@ that use liblangtag.
 Ten pakiet zawiera pliki nagłówkowe do tworzenia aplikacji
 wykorzystujących bibliotekę liblangtag.
 
+%package static
+Summary:	Static liblangtag library
+Summary(pl.UTF-8):	Statyczna biblioteka liblangtag
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+
+%description static
+Static liblangtag library.
+
+%description static -l pl.UTF-8
+Statyczna biblioteka liblangtag.
+
 %prep
 %setup -q
 %patch0 -p1
 %patch1 -p1
 
 %build
+# NOTE: introspection build is broken as of 0.4.0
 %configure \
 	--disable-introspection \
 	--disable-silent-rules \
-	--enable-shared \
-	--disable-static \
+	%{!?with_static_libs:--disable-static} \
+	%{!?with_tests:--disable-test} \
+	--with-html-dir=%{_gtkdocdir}
 
-%{__make} \
-	LD_LIBRARY_PATH=`pwd`/liblangtag/.libs${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+%{__make}
+#	LD_LIBRARY_PATH=`pwd`/liblangtag/.libs${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+
+%{?with_tests:%{__make} check}
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -89,6 +114,7 @@ rm -rf $RPM_BUILD_ROOT
 	DESTDIR=$RPM_BUILD_ROOT
 
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la $RPM_BUILD_ROOT%{_libdir}/%{name}/*.la
+%{?with_static_libs:%{__rm} $RPM_BUILD_ROOT%{_libdir}/%{name}/*.a}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -98,7 +124,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS NEWS README
+%doc AUTHORS ChangeLog NEWS README
 %attr(755,root,root) %{_libdir}/liblangtag.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/liblangtag.so.1
 %dir %{_libdir}/%{name}
@@ -108,7 +134,13 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
-%doc docs/html/*
 %attr(755,root,root)  %{_libdir}/liblangtag.so
 %{_includedir}/liblangtag
 %{_pkgconfigdir}/liblangtag.pc
+%{_gtkdocdir}/liblangtag
+
+%if %{with static_libs}
+%files static
+%defattr(644,root,root,755)
+%{_libdir}/liblangtag.a
+%endif

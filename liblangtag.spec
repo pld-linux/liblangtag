@@ -3,12 +3,12 @@
 %bcond_without	static_libs	# static library build
 %bcond_without	introspection	# GObject interface
 %bcond_without	tests		# "make check" call
-#
+
 Summary:	An interface library to access tags for identifying languages
 Summary(pl.UTF-8):	Biblioteka interfejsu dostępu do znaczników identyfikujących języki
 Name:		liblangtag
 Version:	0.5.8
-Release:	1
+Release:	2
 License:	LGPL v3+
 Group:		Libraries
 Source0:	https://bitbucket.org/tagoh/liblangtag/downloads/%{name}-%{version}.tar.bz2
@@ -130,6 +130,9 @@ Summary:	API documentation for liblangtag library
 Summary(pl.UTF-8):	Dokumentacja API biblioteki liblangtag
 Group:		Documentation
 Conflicts:	liblangtag-devel < 0.5.8
+%if "%{_rpmversion}" >= "5"
+BuildArch:	noarch
+%endif
 
 %description apidocs
 API documentation for liblangtag library.

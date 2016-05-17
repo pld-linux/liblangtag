@@ -7,12 +7,12 @@
 Summary:	An interface library to access tags for identifying languages
 Summary(pl.UTF-8):	Biblioteka interfejsu dostępu do znaczników identyfikujących języki
 Name:		liblangtag
-Version:	0.5.8
-Release:	2
+Version:	0.6.0
+Release:	1
 License:	LGPL v3+
 Group:		Libraries
 Source0:	https://bitbucket.org/tagoh/liblangtag/downloads/%{name}-%{version}.tar.bz2
-# Source0-md5:	aa899eff126216dafe721149fbdb511b
+# Source0-md5:	dcd7a845a8a9b57ca96eb04a29083246
 URL:		http://tagoh.bitbucket.org/liblangtag/
 %{?with_tests:BuildRequires:	check-devel >= 0.9.4}
 %{?with_introspection:BuildRequires:	glib2-devel >= 2.0}
@@ -208,6 +208,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/liblangtag/lt-redundant-db.h
 %{_includedir}/liblangtag/lt-region.h
 %{_includedir}/liblangtag/lt-region-db.h
+%{_includedir}/liblangtag/lt-relation-db.h
 %{_includedir}/liblangtag/lt-script.h
 %{_includedir}/liblangtag/lt-script-db.h
 %{_includedir}/liblangtag/lt-string.h
@@ -229,13 +230,13 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/liblangtag-gobject.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/liblangtag-gobject.so.0
-%{_libdir}/girepository-1.0/LangTag-0.5.typelib
+%{_libdir}/girepository-1.0/LangTag-0.6.typelib
 
 %files gobject-devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/liblangtag-gobject.so
 %{_includedir}/liblangtag/lt-gobject.h
-%{_datadir}/gir-1.0/LangTag-0.5.gir
+%{_datadir}/gir-1.0/LangTag-0.6.gir
 %{_pkgconfigdir}/liblangtag-gobject.pc
 
 %if %{with static_libs}

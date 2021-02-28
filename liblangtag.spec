@@ -133,9 +133,7 @@ Summary:	API documentation for liblangtag library
 Summary(pl.UTF-8):	Dokumentacja API biblioteki liblangtag
 Group:		Documentation
 Conflicts:	liblangtag-devel < 0.5.8
-%if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
-%endif
 
 %description apidocs
 API documentation for liblangtag library.

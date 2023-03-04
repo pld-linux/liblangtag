@@ -1,18 +1,19 @@
 #
 # Conditional build:
-%bcond_without	static_libs	# static library build
+%bcond_without	static_libs	# static library
 %bcond_without	introspection	# GObject interface
 %bcond_without	tests		# "make check" call
 
 Summary:	An interface library to access tags for identifying languages
 Summary(pl.UTF-8):	Biblioteka interfejsu dostępu do znaczników identyfikujących języki
 Name:		liblangtag
-Version:	0.6.3
+Version:	0.6.4
 Release:	1
 License:	LGPL v3+
 Group:		Libraries
 Source0:	https://bitbucket.org/tagoh/liblangtag/downloads/%{name}-%{version}.tar.bz2
-# Source0-md5:	015274eb284b1dc82bf7af1d1774ec64
+# Source0-md5:	c93611c472b5875166b4a3a35a66a62d
+Patch0:		%{name}-tests.patch
 URL:		http://tagoh.bitbucket.org/liblangtag/
 BuildRequires:	autoconf >= 2.62
 BuildRequires:	automake >= 1:1.11
@@ -144,6 +145,7 @@ Dokumentacja API biblioteki liblangtag.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 %{__libtoolize}
@@ -182,7 +184,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog NEWS README
+%doc AUTHORS NEWS README
 %attr(755,root,root) %{_libdir}/liblangtag.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/liblangtag.so.1
 %dir %{_libdir}/%{name}

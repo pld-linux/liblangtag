@@ -7,14 +7,13 @@
 Summary:	An interface library to access tags for identifying languages
 Summary(pl.UTF-8):	Biblioteka interfejsu dostępu do znaczników identyfikujących języki
 Name:		liblangtag
-Version:	0.6.5
+Version:	0.6.7
 Release:	1
 License:	LGPL v3+
 Group:		Libraries
 Source0:	https://bitbucket.org/tagoh/liblangtag/downloads/%{name}-%{version}.tar.bz2
-# Source0-md5:	b96d5918f163045a43aa97719af1c2e2
-Patch0:		%{name}-sh.patch
-URL:		http://tagoh.bitbucket.org/liblangtag/
+# Source0-md5:	5876517621f06944d9abda15508b8183
+URL:		https://bitbucket.org/tagoh/liblangtag/
 BuildRequires:	autoconf >= 2.62
 BuildRequires:	automake >= 1:1.11
 %{?with_tests:BuildRequires:	check-devel >= 0.9.4}
@@ -145,7 +144,6 @@ Dokumentacja API biblioteki liblangtag.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %build
 %{__libtoolize}
